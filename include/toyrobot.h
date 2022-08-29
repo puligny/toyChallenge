@@ -30,10 +30,10 @@ public:
 private:
     unsigned int mWidth;
     unsigned int mHeight;
-    bool mPlaced = false;
+    bool         mPlaced = false;
 
-    int mX;
-    int mY;
+    int            mX;
+    int            mY;
     enum direction mDirection;
 };
 
