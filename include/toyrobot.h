@@ -12,6 +12,10 @@ enum direction {
     MAX
 };
 
+/**
+ * @brief This is a toy robot that can move on a 5x5 table.
+ * The robot must be placed before executing any other instruction.
+ */
 class ToyRobot
 {
 public:

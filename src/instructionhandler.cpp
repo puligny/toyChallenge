@@ -5,6 +5,11 @@
 
 using namespace std;
 
+/**
+ * @brief InstructionHandler constructor.
+ * @param robot pointer to the ToyRobot.
+ * @param fileName [optional] path to an instruction file.
+ */
 InstructionHandler::InstructionHandler(shared_ptr<ToyRobot> robot, string fileName)
     : mRobot(robot)
 {
@@ -16,12 +21,22 @@ InstructionHandler::InstructionHandler(shared_ptr<ToyRobot> robot, string fileNa
     }
 }
 
+/**
+ * @brief InstructionHandler destructor.
+ */
 InstructionHandler::~InstructionHandler()
 {
     if (mFile.is_open())
         mFile.close();
 }
 
+/**
+ * @brief InstructionHandler::run main method of the Instruction handler.
+ * If an input file was given during construction of the object,
+ * execute all instructions present in the file one by one.
+ * Otherwise, start the interactive interface and await input instruction.
+ * @return true if all instructions have been executed successfully.
+ */
 bool InstructionHandler::run()
 {
     if (mFile.is_open() && mFile.good()) {
@@ -59,6 +74,11 @@ bool InstructionHandler::run()
     }
 }
 
+/**
+ * @brief InstructionHandler::executeInstruction parse and execute a single instruction.
+ * @param instruction the instruction string.
+ * @return true if the instruction was executed successfully.
+ */
 bool InstructionHandler::executeInstruction(string instruction)
 {
     string key = instruction.substr(0, instruction.find(' '));
@@ -115,6 +135,12 @@ bool InstructionHandler::executeInstruction(string instruction)
     return true;
 }
 
+/**
+ * @brief InstructionHandler::stringToDirection converts a string to a direction value.
+ * If the string is invalid, it will return direction NONE.
+ * @param word The input direction as a string
+ * @return The output direction value. [SOUTH,EAST,NORTH,WEST,NONE]
+ */
 direction InstructionHandler::stringToDirection(std::string word)
 {
     if (word == "SOUTH")
