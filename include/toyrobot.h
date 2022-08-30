@@ -8,7 +8,8 @@ enum direction {
     NORTH,
     EAST,
     SOUTH,
-    WEST
+    WEST,
+    MAX
 };
 
 class ToyRobot

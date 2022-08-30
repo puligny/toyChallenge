@@ -88,9 +88,13 @@ void ToyRobot::rotate(bool right)
         return;
 
     if (right)
-        mDirection = (enum direction)(((int)mDirection + 1) % 4);
-    else
-        mDirection = (enum direction)(((int)mDirection - 1) % 4);
+        mDirection = (enum direction)(((int)mDirection + 1) % MAX);
+    else {
+        int newDir = mDirection - 1;
+        if (newDir < 0)
+            newDir = MAX - 1;
+        mDirection = (enum direction) newDir;
+    }
 }
 
 void ToyRobot::report()
