@@ -30,8 +30,10 @@ ToyRobot::ToyRobot(unsigned int width, unsigned int height)
 
 bool ToyRobot::move()
 {
-    if (!mPlaced)
+    if (!mPlaced) {
+        cerr << "cannot move robot before it is placed." << endl;
         return false;
+    }
 
     switch (mDirection) {
 
@@ -74,6 +76,10 @@ bool ToyRobot::place(unsigned int x, unsigned int y, enum direction dir)
         cerr << "cannot place robot, coordinates are out of range." << endl;
         return false;
     }
+    if (dir >= MAX || dir <= NONE) {
+        cerr << "cannot place robot, direction is invalid." << endl;
+        return false;
+    }
 
     mX = x;
     mY = y;
@@ -84,8 +90,10 @@ bool ToyRobot::place(unsigned int x, unsigned int y, enum direction dir)
 
 void ToyRobot::rotate(bool right)
 {
-    if (!mPlaced)
+    if (!mPlaced) {
+        cerr << "cannot rotate robot before it is placed." << endl;
         return;
+    }
 
     if (right)
         mDirection = (enum direction)(((int)mDirection + 1) % MAX);
@@ -99,8 +107,10 @@ void ToyRobot::rotate(bool right)
 
 void ToyRobot::report()
 {
-    if (!mPlaced)
+    if (!mPlaced) {
+        cerr << "cannot report position before the robot is placed." << endl;
         return;
+    }
 
     cout << mX << ',' << mY << ',' << mDirection << endl;
 }
