@@ -1,6 +1,37 @@
 #include "toyrobottests.h"
 #include "toyrobot.h"
 
+#include <iostream>
+#include <sstream>
+
+int testConstructor() {
+    // test default constructor initialization
+    ToyRobot robot;
+    if (robot.isPlaced() || robot.direction() != NONE
+            || robot.x() != -1 || robot.x() != -1)
+        return -1;
+
+    // test a robot with a smaller table
+    ToyRobot small(2, 2);
+    if (small.isPlaced() || small.direction() != NONE
+            || small.x() != -1 || small.x() != -1)
+        return -1;
+
+    if (small.place(0, 0, NORTH) == false)
+        return -1;
+    small.move();
+    small.move();
+    if (small.y() != 1)
+        return -1;
+    small.rotate(true);
+    small.move();
+    small.move();
+    if (small.x() != 1)
+        return -1;
+
+    return 0;
+}
+
 int testPlace() {
     ToyRobot robot;
     if (robot.isPlaced())
@@ -44,11 +75,11 @@ int testMove() {
     // north direction increments y position
     if (robot.x() != 0 || robot.y() != 1)
         return -1;
-    robot.move();
-    robot.move();
-    robot.move();
 
     // robot refuses to fall from the table
+    robot.move();
+    robot.move();
+    robot.move();
     robot.move();
     if (robot.y() != 4)
         return -1;
@@ -135,13 +166,40 @@ int testRotate() {
     return 0;
 }
 
+int testReport() {
+    ToyRobot robot;
+    std::stringstream output;
+    std::streambuf* prevcoutbuf = std::cout.rdbuf(output.rdbuf());
+
+    // test that report does not output anything before robot is placed.
+    robot.report();
+    if (output.str().empty() == false) {
+        std::cout.rdbuf(prevcoutbuf);
+        return -1;
+    }
+
+    // test that report output the correct position and direction
+    robot.place(4, 2, SOUTH);
+    robot.report();
+    if (output.str().compare("4,2,SOUTH\n")) {
+        std::cout.rdbuf(prevcoutbuf);
+        return -1;
+    }
+
+    std::cout.rdbuf(prevcoutbuf);
+
+    return 0;
+}
+
 int toyRobotTests()
 {
     int res = 0;
 
+    res += testConstructor();
     res += testPlace();
     res += testMove();
     res += testRotate();
+    res += testReport();
 
     return res;
 }

@@ -1,6 +1,10 @@
 #include "instructionhandlertests.h"
 #include "instructionhandler.h"
 
+#include <iostream>
+#include <sstream>
+#include <string.h>
+
 int testStringToDirection() {
     std::shared_ptr<ToyRobot> robot;
     InstructionHandler handler(robot);
@@ -36,17 +40,17 @@ int testExecuteInstruction() {
     std::shared_ptr<ToyRobot> robot(new ToyRobot);
     InstructionHandler handler(robot);
 
-    // test that commands called before placed fails
-    if (handler.executeInstruction("MOVE"))
+    // test that commands called before placed fail silently
+    if (handler.executeInstruction("MOVE") == false)
         return -1;
 
-    if (handler.executeInstruction("LEFT"))
+    if (handler.executeInstruction("LEFT") == false)
         return -1;
 
-    if (handler.executeInstruction("RIGHT"))
+    if (handler.executeInstruction("RIGHT") == false)
         return -1;
 
-    if (handler.executeInstruction("REPORT"))
+    if (handler.executeInstruction("REPORT") == false)
         return -1;
 
     if (handler.executeInstruction("PLACE 0,1,SOUTH") == false)
@@ -83,6 +87,42 @@ int testRunFile() {
     if (allCmds.run() == false)
         return -1;
 
+    InstructionHandler complex(robot,"../tests/complex.txt");
+    if (complex.run() == false)
+        return -1;
+
+    return 0;
+}
+
+int testInteractiveMode() {
+    std::stringstream input;
+    std::streambuf* prevcinbuf = std::cin.rdbuf(input.rdbuf());
+    std::stringstream output;
+    std::streambuf* prevcoutbuf = std::cout.rdbuf(output.rdbuf());
+    std::shared_ptr<ToyRobot> robot(new ToyRobot);
+    InstructionHandler handler(robot);
+
+    // add some input instructions
+    input << "PLACE 2,3,EAST" << std::endl
+          << "MOVE" << std::endl
+          << "RIGHT" << std::endl
+          << "REPORT" << std::endl
+          << "q" << std::endl;
+    handler.run();
+
+    // test that commands have been handled and last REPORT cmd correctly outputted
+    std::string report = output.str();
+    report = report.substr(report.find("table.\n")+strlen("table.\n"), strlen("3,3,SOUTH\n"));
+    if (report.compare("3,3,SOUTH\n")) {
+        std::cin.rdbuf(prevcinbuf);
+        std::cout.rdbuf(prevcoutbuf);
+        return -1;
+    }
+
+
+    std::cin.rdbuf(prevcinbuf);
+    std::cout.rdbuf(prevcoutbuf);
+
     return 0;
 }
 
@@ -93,6 +133,7 @@ int instructionHandlerTests()
     res += testStringToDirection();
     res += testExecuteInstruction();
     res += testRunFile();
+    res += testInteractiveMode();
 
     return res;
 }

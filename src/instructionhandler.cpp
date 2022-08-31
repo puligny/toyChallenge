@@ -84,7 +84,7 @@ bool InstructionHandler::executeInstruction(string instruction)
     string key = instruction.substr(0, instruction.find(' '));
     if (key == "PLACE") {
         string args = instruction.substr(instruction.find(' ')+1); // +1 to skip the whitespace
-        if (regex_match(args,regex("[0-4],[0-4],\\w"))) {
+        if (regex_match(args,regex("[0-9],[0-9],\\w+")) == false) {
             cerr << "invalids arguments for command PLACE" << endl;
             return false;
         }
@@ -102,28 +102,28 @@ bool InstructionHandler::executeInstruction(string instruction)
     } else if (key == "MOVE") {
         if (mRobot->isPlaced() == false) {
             cerr << "cannot execute instruction " << key << ". Robot is not placed." << endl;
-            return false;
+            return true;
         }
         mRobot->move();
 
     } else if (key == "LEFT") {
         if (mRobot->isPlaced() == false) {
             cerr << "cannot execute instruction " << key << ". Robot is not placed." << endl;
-            return false;
+            return true;
         }
         mRobot->rotate(false);
 
     } else if (key == "RIGHT") {
         if (mRobot->isPlaced() == false) {
             cerr << "cannot execute instruction " << key << ". Robot is not placed." << endl;
-            return false;
+            return true;
         }
         mRobot->rotate(true);
 
     } else if (key == "REPORT") {
         if (mRobot->isPlaced() == false) {
             cerr << "cannot execute instruction " << key << ". Robot is not placed." << endl;
-            return false;
+            return true;
         }
         mRobot->report();
 
