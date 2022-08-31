@@ -21,7 +21,7 @@ class ToyRobot
 public:
     ToyRobot(unsigned int width=5, unsigned int  height=5);
 
-    bool move();
+    void move();
     bool place(unsigned int x, unsigned int y, direction dir);
     void rotate(bool right);
     void report();

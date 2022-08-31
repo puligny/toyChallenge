@@ -34,12 +34,12 @@ int testPlace() {
 int testMove() {
     ToyRobot robot;
     // cannot move until the robot is placed
-    if (robot.move())
+    robot.move();
+    if (robot.x() != -1 || robot.y() != -1)
         return -1;
 
     robot.place(0, 0, NORTH);
-    if (robot.move() == false)
-        return -1;
+    robot.move();
     // move shall only place the robot one step further
     // north direction increments y position
     if (robot.x() != 0 || robot.y() != 1)
@@ -49,15 +49,13 @@ int testMove() {
     robot.move();
 
     // robot refuses to fall from the table
-    if (robot.move())
-        return -1;
+    robot.move();
     if (robot.y() != 4)
         return -1;
 
     // test to move to a negative position by facing west
     robot.rotate(false);
-    if (robot.move())
-        return -1;
+    robot.move();
     if (robot.x() != 0)
         return -1;
 
@@ -67,8 +65,7 @@ int testMove() {
     robot.move();
     robot.move();
     robot.move();
-    if (robot.move())
-        return -1;
+    robot.move();
     if (robot.y() != 0)
         return -1;
 
@@ -78,8 +75,7 @@ int testMove() {
     robot.move();
     robot.move();
     robot.move();
-    if (robot.move())
-        return -1;
+    robot.move();
     if (robot.x() != 4)
         return -1;
 

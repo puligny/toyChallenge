@@ -41,49 +41,38 @@ ToyRobot::ToyRobot(unsigned int width, unsigned int height)
 
 /**
  * @brief ToyRobot::move Move the robot one unit forward.
- * Will succeed only if the robot is placed and moving won't cause the robot to fall.
- * @return true if the robot has moved.
+ * Will be executed only if the robot is placed and moving won't cause the robot to fall.
  */
-bool ToyRobot::move()
+void ToyRobot::move()
 {
     if (!mPlaced) {
         cerr << "cannot move robot before it is placed." << endl;
-        return false;
+        return;
     }
 
     switch (mDirection) {
 
     case NONE:
-        return false;
+        return;
     case NORTH:
-        if (mY >= 4)
-            return false;
-        else
+        if (mY < (mHeight - 1))
             mY++;
         break;
     case EAST:
-        if (mX >= 4)
-            return false;
-        else
+        if (mX < (mWidth - 1))
             mX++;
         break;
     case SOUTH:
-        if (mY <= 0)
-            return false;
-        else
+        if (mY > 0)
             mY--;
         break;
     case WEST:
-        if (mX <= 0)
-            return false;
-        else
+        if (mX > 0)
             mX--;
         break;
     default:
-        return false;
+        break;
     }
-
-    return true;
 }
 
 /**
